@@ -1,14 +1,13 @@
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.nio.file.*;
 import java.util.Scanner;
-
-import static java.nio.file.Files.*;
 
 public class Contacts {
 
@@ -26,13 +25,13 @@ public class Contacts {
         if (!Files.exists(dataPath)) { // If "file name" does NOT exist, create the FILE
             Files.createFile(dataPath);
         }
-        List<String> lines = new ArrayList<>();
-        lines.add("Name" + " | " + "Phone Number\n" +
-                "---------------\n" +
-                "Jack Blank | 1231231234\n" +
-                "Jane Doe | 2342342345\n" +
-                "Sam Space | 3453453456\n");
-        Files.write(dataDirectory, lines);
+        List<Contacts> contacts = new ArrayList<>();
+        Contacts contact = new Contacts("John", "Doe", "0000000000");
+        contacts.add(contact);
+        contact = new Contacts("Jane", "Doe", "0000000000");
+        contacts.add(contact);
+        contact = new Contacts("Jake", "Doe", "0000000000");
+        contacts.add(contact);
 
         Scanner sc = new Scanner(System.in);
 
@@ -48,16 +47,73 @@ public class Contacts {
 
         if(i == 1){
             viewContacts(dataDirectory);
-        } else if(i == 6){
-            writeContacts(lines, dataDirectory);
+        }else if (i == 2){
+            contacts.add(addContact());
+        }else if(i == 6){
+//            TODO add to save file
         }
     }
+
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+//  CONSTRUCTOR
+    public Contacts(String firstName, String lastName, String phoneNumber){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+    }
+
     // OPTION 1
     public static void viewContacts(Path dataDirectory) throws IOException {
         System.out.println("\n" + Files.readAllLines(dataDirectory));
     }
+
+    // OPTION 2
+
+    public static Contacts addContact() {
+        System.out.println("Enter a new contact?");
+        Scanner input = new Scanner(System.in);
+        System.out.println("Please enter First Name: ");
+        String newFirstName = input.nextLine();
+        System.out.println("Please enter Last Name: ");
+        String newLastName = input.nextLine();
+        System.out.println("Please enter Phone Number: ");
+        String newPhoneNumber = input.nextLine();
+        Contacts contact = new Contacts(newFirstName, newLastName, newPhoneNumber);
+        return contact;
+    }
+
+    // OPTION 3
+
+
     // OPTION 6
-    public static void writeContacts(List<String> contacts, Path dataDirectory) throws IOException {
+    public static void saveContacts(List<String> contacts, Path dataDirectory) throws IOException {
         Files.write(dataDirectory, contacts);
     }
 }
