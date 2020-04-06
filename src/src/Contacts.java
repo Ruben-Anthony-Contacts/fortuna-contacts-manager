@@ -53,6 +53,7 @@ public class Contacts {
 //            TODO add to save file
         }
     }
+//  END OF MAIN
 
     private String firstName;
     private String lastName;
