@@ -23,41 +23,22 @@ public class Contacts {
             Files.createFile(dataPath);
         }
 
-//      ARRAY
+//      CREATES CONTACTS AS ARRAY LIST OF STRINGS
 
         List<String> contactsArray = new ArrayList<>();
+        contactsArray = Files.readAllLines(dataDirectory);
 
-//        Contacts contact = new Contacts("John");
-//        contactsArray.add(contact);
-//        contact = new Contacts("Jane");
-//        contactsArray.add(contact);
-//        contact = new Contacts("Joe");
-//        contactsArray.add(contact);
-//        System.out.println("ArrayList before: " + contact);
-//
-//        Iterator<Contacts> itr = contactsArray.iterator();
-//        Scanner scannerValue = new Scanner(System.in);
-//        System.out.println("What do you want to delete?");
-//        String userInput = scannerValue.nextLine();
-//
-//        while (itr.hasNext()) {
-//            Contacts contactItr = itr.next();
-//            if (contactItr.equals(userInput)) {
-//                contactsArray.remove(contact);
-//            }
-//        }
-//
-//        System.out.println("ArrayList: new array list " + contactsArray);
+//      USER MAIN MENU + OPTIONS
 
         Scanner sc = new Scanner(System.in);
+        boolean keepGoing = true;
         do {
 
             System.out.println("\n\t1. View contacts.\n" +
                     "\t2. Add a new contact.\n" +
                     "\t3. Search a contact by name.\n" +
                     "\t4. Delete an existing contact.\n" +
-                    "\t5. Save Contacts.\n" +
-                    "\t6. Exit.\n" + //Save to contacts.txt on Exit (and Discard changes)
+                    "\t5. Exit.\n" + //Save to contacts.txt on Exit (and Discard changes)
                     "\tEnter an option (1, 2, 3, 4, 5, or 6):");
 
             int i = sc.nextInt();
@@ -68,23 +49,19 @@ public class Contacts {
                 contactsArray.add(addContact(contactsArray, dataDirectory));
                 Files.write(dataDirectory, contactsArray, StandardOpenOption.APPEND);
             } else if (i == 3) {
-
+                // Enter search by name method here...
             } else if (i == 4) {
                 contactsArray.remove(removeContact(contactsArray, dataDirectory));
                 Files.write(dataDirectory, contactsArray);
             } else if (i == 5) {
-                Files.write(dataDirectory, contactsArray);
-            } else if (i == 6) {
-
+                keepGoing = false;
+                exitContacts(contactsArray, dataDirectory);
             }
-        } while (true);
+        } while (keepGoing);
     }
 
 //  END OF MAIN ---------------------------------
 
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
     private String entry;
 
     public void setEntry(String entry) {
@@ -95,44 +72,19 @@ public class Contacts {
         return entry;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    //  CONSTRUCTOR
+    //  CONTACT CONSTRUCTOR
 
     public Contacts(String entry) {
         this.entry = entry;
-
     }
 
-    // OPTION 1
+    // OPTION 1: VIEW CONTACTS
 
     public static void viewContacts(Path dataDirectory) throws IOException {
         System.out.println("\n" + Files.readAllLines(dataDirectory));
     }
 
-    // OPTION 2
+    // OPTION 2: ADD A CONTACT
 
     public static String addContact(List<String> contactsArray, Path dataDirectory) throws IOException {
         System.out.println("Enter a new name and phone number.");
@@ -142,10 +94,10 @@ public class Contacts {
         return newEntry;
     }
 
-    // OPTION 3
+    // OPTION 3: SEARCH BY NAME
 
 
-    // OPTION 4
+    // OPTION 4: DELETE A CONTACT
 
     public static String removeContact(List<String> contactsArray, Path dataDirectory) throws IOException {
         System.out.println("Remove a name and phone number.");
@@ -155,9 +107,10 @@ public class Contacts {
         return newEntry;
     }
 
-    // OPTION 5
+    // OPTION 5: EXIT
 
-    public void saveContacts(List<String> contactsArray, Path dataDirectory) throws IOException {
-        Files.write(dataDirectory, contactsArray);
+    public static void exitContacts(List<String> contactsArray, Path dataDirectory) throws IOException {
+//        Files.write(dataDirectory, contactsArray);
+        System.out.println("\tSession data has been saved. Goodbye!");
     }
 }
