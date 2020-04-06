@@ -49,7 +49,7 @@ public class Contacts {
                 contactsArray.add(addContact(contactsArray, dataDirectory));
                 Files.write(dataDirectory, contactsArray, StandardOpenOption.APPEND);
             } else if (i == 3) {
-                // Enter search by name method here...
+                contactsArray.contains(searchContact(contactsArray, dataDirectory).equalsIgnoreCase());
             } else if (i == 4) {
                 contactsArray.remove(removeContact(contactsArray, dataDirectory));
                 Files.write(dataDirectory, contactsArray);
@@ -96,6 +96,13 @@ public class Contacts {
 
     // OPTION 3: SEARCH BY NAME
 
+    public static String searchContact(List<String> contactsArray, Path dataDirectory) throws IOException {
+        System.out.println("Search by first name, last name or phone number.");
+        Scanner input = new Scanner(System.in);
+        String newEntry = input.nextLine();
+        Contacts contact = new Contacts(newEntry);
+        return newEntry;
+    }
 
     // OPTION 4: DELETE A CONTACT
 
