@@ -13,7 +13,6 @@ public class Contacts {
         Path dataPath = Paths.get(directory); // Main path
         Path dataDirectory = Paths.get(directory, filename); // Main directory
 
-        searchContact();
 
 //      ESTABLISHES FILE AND DIRECTORY EXISTS
         if (Files.notExists(dataDirectory)) { // If "file name" does NOT exist within directory, create the DIRECTORY...
@@ -22,13 +21,33 @@ public class Contacts {
         if (!Files.exists(dataPath)) { // If "file name" does NOT exist, create the FILE
             Files.createFile(dataPath);
         }
-        List<Contacts> contacts = new ArrayList<>();
-        Contacts contact = new Contacts("John", "Doe", "0000000000");
-        contacts.add(contact);
-        contact = new Contacts("Jane", "Doe", "0000000000");
-        contacts.add(contact);
-        contact = new Contacts("Jake", "Doe", "0000000000");
-        contacts.add(contact);
+
+//      ARRAY
+
+
+        List<Contacts> contactsArray = new ArrayList<>();
+
+        Contacts contact = new Contacts("John");
+        contactsArray.add(contact);
+        contact = new Contacts("Jane");
+        contactsArray.add(contact);
+        contact = new Contacts("Joe");
+        contactsArray.add(contact);
+        System.out.println("ArrayList before: " + contact);
+
+        Iterator<Contacts> itr = contactsArray.iterator();
+        Scanner scannerValue = new Scanner(System.in);
+        System.out.println("What do you want to delete?");
+        String userInput = scannerValue.nextLine();
+        while (itr.hasNext()) {
+            Contacts contactItr = itr.next();
+            if (contactItr.equals(userInput)) {
+                contactsArray.remove(contact);
+            }
+        }
+        System.out.println("ArrayList: new array list " + contactsArray);
+
+
 
         Scanner sc = new Scanner(System.in);
 
@@ -45,19 +64,31 @@ public class Contacts {
         if(i == 1){
             viewContacts(dataDirectory);
         }else if (i == 2){
-            contacts.add(addContact());
+            contactsArray.add(addContact(contactsArray, dataDirectory));
         }else if (i == 3){
-//            contacts.add(addContact()); <-------------
+
         }else if(i == 6){
 //            TODO add to save file
         }
+
+
+
+
     }
 //  END OF MAIN
 
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    private String entry;
 
+    public void setEntry(String entry) {
+        this.entry = entry;
+    }
+
+    public String getEntry() {
+        return entry;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -82,15 +113,14 @@ public class Contacts {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
 //  CONSTRUCTOR
-    public Contacts(String firstName, String lastName, String phoneNumber){
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
+    public Contacts(String entry){
+        this.entry = entry;
+
     }
 
-    // HASH MAP
-    static HashMap<String, String> contactsList = new HashMap<>(); // Define hash map
+
 
     // OPTION 1
     public static void viewContacts(Path dataDirectory) throws IOException {
@@ -99,30 +129,36 @@ public class Contacts {
 
     // OPTION 2
 
-    public static Contacts addContact() {
-        System.out.println("Enter a new contact?");
+    public static Contacts addContact(List<Contacts> contactsArray, Path dataDirectory) throws IOException {
+        System.out.println("Enter a new name and phone number.");
         Scanner input = new Scanner(System.in);
-        System.out.println("Please enter First Name: ");
-        String newFirstName = input.nextLine();
-        System.out.println("Please enter Last Name: ");
-        String newLastName = input.nextLine();
-        System.out.println("Please enter Phone Number: ");
-        String newPhoneNumber = input.nextLine();
-        Contacts contact = new Contacts(newFirstName, newLastName, newPhoneNumber);
+        String newEntry = input.nextLine();
+        Contacts contact = new Contacts(newEntry);
+        Files.write(dataDirectory, contactsArray);
         return contact;
     }
 
     // OPTION 3
-    public static Map<String, String> searchContact() {
-        System.out.println("\t\nEnter a contact to search for (e.g. name or number): ");
-        Scanner input = new Scanner(System.in);
-        contactsList.get("Ruben");
-        contactsList.getOrDefault("Sorry", "No results found!");
-        return contactsList;
+    public void searchContact() {
+//        System.out.println("\t\nEnter a contact to search for (e.g. name or number): ");
+//        Scanner input = new Scanner(System.in);
+//        contactsList.get("Ruben");
+//        contactsList.getOrDefault("Sorry", "No results found!");
+//        return contactsList;
     }
 
+    // OPTION 4
+//    public void deleteContact() {
+//        for (int i = 0; i < contacts.length
+//        }
+//
+//    }
+
+
+
+
     // OPTION 6
-    public void saveContacts(List<String> contacts, Path dataDirectory) throws IOException {
-        Files.write(dataDirectory, contacts);
+    public void saveContacts(List<String> contactsArray, Path dataDirectory) throws IOException {
+        Files.write(dataDirectory, contactsArray);
     }
 }
