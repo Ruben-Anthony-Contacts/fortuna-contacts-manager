@@ -1,13 +1,8 @@
-import org.w3c.dom.ls.LSOutput;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Contacts {
 
@@ -17,6 +12,8 @@ public class Contacts {
 
         Path dataPath = Paths.get(directory); // Main path
         Path dataDirectory = Paths.get(directory, filename); // Main directory
+
+        searchContact();
 
 //      ESTABLISHES FILE AND DIRECTORY EXISTS
         if (Files.notExists(dataDirectory)) { // If "file name" does NOT exist within directory, create the DIRECTORY...
@@ -49,6 +46,8 @@ public class Contacts {
             viewContacts(dataDirectory);
         }else if (i == 2){
             contacts.add(addContact());
+        }else if (i == 3){
+//            contacts.add(addContact()); <-------------
         }else if(i == 6){
 //            TODO add to save file
         }
@@ -90,6 +89,9 @@ public class Contacts {
         this.phoneNumber = phoneNumber;
     }
 
+    // HASH MAP
+    static HashMap<String, String> contactsList = new HashMap<>(); // Define hash map
+
     // OPTION 1
     public static void viewContacts(Path dataDirectory) throws IOException {
         System.out.println("\n" + Files.readAllLines(dataDirectory));
@@ -111,10 +113,16 @@ public class Contacts {
     }
 
     // OPTION 3
-
+    public static Map<String, String> searchContact() {
+        System.out.println("\t\nEnter a contact to search for (e.g. name or number): ");
+        Scanner input = new Scanner(System.in);
+        contactsList.get("Ruben");
+        contactsList.getOrDefault("Sorry", "No results found!");
+        return contactsList;
+    }
 
     // OPTION 6
-    public static void saveContacts(List<String> contacts, Path dataDirectory) throws IOException {
+    public void saveContacts(List<String> contacts, Path dataDirectory) throws IOException {
         Files.write(dataDirectory, contacts);
     }
 }
