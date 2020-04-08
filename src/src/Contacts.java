@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class Contacts {
@@ -30,30 +29,30 @@ public class Contacts {
 
 //      USER MAIN MENU + OPTIONS
 
-        Scanner sc = new Scanner(System.in);
         boolean keepGoing = true;
         do {
 
             System.out.println("\n\t1. View contacts.\n" +
-                    "\t2. Add a new contact.\n" +
-                    "\t3. Search a contact by name.\n" +
-                    "\t4. Delete an existing contact.\n" +
-                    "\t5. Exit.\n" + //Save to contacts.txt on Exit (and Discard changes)
-                    "\tEnter an option (1, 2, 3, 4, or 5):");
+                                 "\t2. Add a new contact.\n" +
+                                 "\t3. Search a contact by name.\n" +
+                                 "\t4. Delete an existing contact.\n" +
+                                 "\t5. Exit.\n" + //Save to contacts.txt on Exit
+                                 "\n\tEnter an option (1, 2, 3, 4, or 5):");
 
+            Scanner sc = new Scanner(System.in);
             int i = sc.nextInt();
 
-            if (i == 1) {
-                viewContacts(dataDirectory);
-            } else if (i == 2) {
+            if (i == 1) { //  VIEW CONTACTS
+                viewContacts(contactsArray, dataDirectory);
+            } else if (i == 2) { // ADD A CONTACT
                 contactsArray.add(addContact(contactsArray, dataDirectory));
                 Files.write(dataDirectory, contactsArray);
-            } else if (i == 3) {
+            } else if (i == 3) { // SEARCH CONTACTS
                 searchContact(contactsArray, dataDirectory);
-            } else if (i == 4) {
+            } else if (i == 4) { // DELETE A CONTACT
                 contactsArray.remove(removeContact(contactsArray, dataDirectory));
                 Files.write(dataDirectory, contactsArray);
-            } else if (i == 5) {
+            } else if (i == 5) { // EXIT
                 keepGoing = false;
                 exitContacts(contactsArray, dataDirectory);
             }
@@ -80,8 +79,13 @@ public class Contacts {
 
     // OPTION 1: VIEW CONTACTS
 
-    public static void viewContacts(Path dataDirectory) throws IOException {
-        System.out.println("\n" + Files.readAllLines(dataDirectory));
+    public static void viewContacts(List<String> contactsArray, Path dataDirectory) throws IOException {
+        System.out.format(String.format("%s %s %s \n%s\n", "Name", "|", "Number","--------------------"));
+        for (String contact : contactsArray) {
+            if (contact.contains(contact)) {
+                System.out.println(contact);
+            }
+        }
     }
 
     // OPTION 2: ADD A CONTACT
@@ -101,15 +105,16 @@ public class Contacts {
         Scanner input = new Scanner(System.in);
         String searchedEntry = input.nextLine();
         boolean matchFound = false;
+
         for (String contact : contactsArray) {
             if (contact.contains(searchedEntry)) {
                 matchFound = true;
-                System.out.println("Match found: " + searchedEntry);
+                System.out.println("Match found: " + contact);
             }
         }
-        if(!matchFound) {
-            System.out.println("No match found. Try again.");
-        }
+            if(!matchFound) {
+                System.out.println("No match found.");
+            }
     }
 
     // OPTION 4: DELETE A CONTACT
@@ -125,7 +130,6 @@ public class Contacts {
     // OPTION 5: EXIT
 
     public static void exitContacts(List<String> contactsArray, Path dataDirectory) throws IOException {
-//        Files.write(dataDirectory, contactsArray);
         System.out.println("\tSession data has been saved. Goodbye!");
     }
 }
