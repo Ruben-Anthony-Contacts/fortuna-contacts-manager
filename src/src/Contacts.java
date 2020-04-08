@@ -49,7 +49,7 @@ public class Contacts {
                 contactsArray.add(addContact(contactsArray, dataDirectory));
                 Files.write(dataDirectory, contactsArray, StandardOpenOption.APPEND);
             } else if (i == 3) {
-                contactsArray.contains(searchContact(contactsArray, dataDirectory).equalsIgnoreCase());
+                contactsArray.contains(searchContact(contactsArray, dataDirectory));
             } else if (i == 4) {
                 contactsArray.remove(removeContact(contactsArray, dataDirectory));
                 Files.write(dataDirectory, contactsArray);
