@@ -39,7 +39,7 @@ public class Contacts {
                     "\t3. Search a contact by name.\n" +
                     "\t4. Delete an existing contact.\n" +
                     "\t5. Exit.\n" + //Save to contacts.txt on Exit (and Discard changes)
-                    "\tEnter an option (1, 2, 3, 4, 5, or 6):");
+                    "\tEnter an option (1, 2, 3, 4, or 5):");
 
             int i = sc.nextInt();
 
@@ -47,9 +47,9 @@ public class Contacts {
                 viewContacts(dataDirectory);
             } else if (i == 2) {
                 contactsArray.add(addContact(contactsArray, dataDirectory));
-                Files.write(dataDirectory, contactsArray, StandardOpenOption.APPEND);
+                Files.write(dataDirectory, contactsArray);
             } else if (i == 3) {
-                contactsArray.contains(searchContact(contactsArray, dataDirectory));
+                searchContact(contactsArray, dataDirectory);
             } else if (i == 4) {
                 contactsArray.remove(removeContact(contactsArray, dataDirectory));
                 Files.write(dataDirectory, contactsArray);
@@ -87,7 +87,7 @@ public class Contacts {
     // OPTION 2: ADD A CONTACT
 
     public static String addContact(List<String> contactsArray, Path dataDirectory) throws IOException {
-        System.out.println("Enter a new name and phone number.");
+        System.out.println("Enter a name and phone number to add.");
         Scanner input = new Scanner(System.in);
         String newEntry = input.nextLine();
         Contacts contact = new Contacts(newEntry);
@@ -96,12 +96,20 @@ public class Contacts {
 
     // OPTION 3: SEARCH BY NAME
 
-    public static String searchContact(List<String> contactsArray, Path dataDirectory) throws IOException {
-        System.out.println("Search by first name, last name or phone number.");
+    public static void searchContact(List<String> contactsArray, Path dataDirectory) throws IOException {
+        System.out.println("Enter a name and phone number to search for.");
         Scanner input = new Scanner(System.in);
-        String newEntry = input.nextLine();
-        Contacts contact = new Contacts(newEntry);
-        return newEntry;
+        String searchedEntry = input.nextLine();
+        boolean matchFound = false;
+        for (String contact : contactsArray) {
+            if (contact.contains(searchedEntry)) {
+                matchFound = true;
+                System.out.println("Match found: " + searchedEntry);
+            }
+        }
+        if(!matchFound) {
+            System.out.println("No match found. Try again.");
+        }
     }
 
     // OPTION 4: DELETE A CONTACT
